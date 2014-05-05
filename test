@@ -1,0 +1,80 @@
+#!/usr/bin/perl -w
+
+#
+# Purpose: this script builds and deploys isum13pt test in all
+# supported configurations.
+#
+
+use Term::ANSIColor;
+
+my($test) = "test_isum13pt";
+
+sub build
+{
+	my($desc) = $_[0];
+	my($options) = $_[1];
+	
+	# Clean up everything and rebuild.
+	my($cmd) = "cmake $options ..";
+	my($result) = system("rm -rf build && mkdir build && cd build && $cmd && make");
+	if ($result != 0)
+	{
+		print color 'bold red';
+		print "Error while building \"$cmd\"\n";
+		print color 'reset';
+		exit(-1);
+	}
+}
+
+sub run
+{
+	my($desc) = $_[0];
+	my($cmd) = $_[1];
+	system("$cmd");
+	my($error) = scalar(split('\n',`find build/ -name "*.png"`));
+	if ($error != 0)
+	{
+		print color 'bold white';
+		print "$desc \"$cmd\"";
+		print color 'bold red';
+		print "Got a png diff file\n";
+		print color 'reset';
+		exit(-1);
+	}
+	else
+	{
+		print color 'bold white';
+		print "$desc \"$cmd\"";
+		print color 'bold green';
+		print " OK!\n";
+		print color 'reset';
+	}
+}
+
+my($test1) = "Testing single-process CPU-only version ...";
+build($test1, "-DHAVE_MPI=OFF -DHAVE_CUDA=OFF");
+run($test1, "cd build && ./$test 64 64");
+
+my($test2) = "Testing single-process CPU & GPU/MAPPED version ...";
+build($test2, "-DHAVE_MPI=OFF -DHAVE_CUDA=ON -DHAVE_CUDA_MAPPED=ON -DHAVE_CUDA_PINNED=OFF");
+run($test2, "cd build && ./$test 64 64 CPU");
+run($test2, "cd build && ./$test 64 64 GPU");
+
+my($test3) = "Testing single-process CPU & GPU/PINNED version ...";
+build($test3, "-DHAVE_MPI=OFF -DHAVE_CUDA=ON -DHAVE_CUDA_MAPPED=OFF -DHAVE_CUDA_PINNED=ON");
+run($test3, "cd build && ./$test 64 64 CPU");
+run($test3, "cd build && ./$test 64 64 GPU");
+
+my($test4) = "Testing MPI CPU-only version ...";
+build($test4, "-DHAVE_MPI=ON -DHAVE_CUDA=OFF");
+run($test4, "cd build && ./$test 64 64 1 1 1");
+run($test4, "cd build && mpirun -np 8 ./$test 64 64 2 2 2");
+
+my($test5) = "Testing MPI CPU & GPU/MAPPED version ...";
+build($test5, "-DHAVE_MPI=ON -DHAVE_CUDA=ON -DHAVE_CUDA_MAPPED=ON -DHAVE_CUDA_PINNED=OFF");
+run($test5, "cd build && ./$test 64 64 1 1 1 CPU");
+run($test5, "cd build && mpirun -np 8 ./$test 64 64 2 2 2 CPU");
+run($test5, "cd build && ./$test 64 64 1 1 1 GPU");
+run($test5, "cd build && mpirun -np 2 ./$test 64 64 2 1 1 GPU");
+run($test5, "cd build && mpirun -np 8 ./$test 64 64 2 2 2 GPU");
+

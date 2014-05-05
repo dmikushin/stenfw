@@ -1,0 +1,1 @@
+mpirun -np 4 xterm -e gdb ./isum13pt -x launch

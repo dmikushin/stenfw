@@ -1,0 +1,96 @@
+% Dmitry Mikushin, USI Lugano, dmitry.mikushin@usi.ch,
+% using portions of original style file by Tom Cashman
+%
+% IMPORTANT NOTICE:
+%
+% The USI logo is unique; it is authorized for use only by employees of the
+% Università della Svizzera italiana for work-related projects; others can use them
+% ONLY with prior authorization (contact: press@usi.ch).
+%
+% http://www.press.usi.ch/en/corporate-design/corporate-design-stampa.htm
+%
+% This style file unofficially mimics the design theme of Università della Svizzera italiana.
+
+\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+\ProcessOptionsBeamer
+
+\mode<presentation>
+
+\RequirePackage{tikz}
+\RequirePackage{lmodern}
+
+\setbeamertemplate{sidebar right}{}
+
+\definecolor{USIorange}{RGB}{245,128,37}
+
+\setbeamertemplate{frametitle}
+{%
+  \begin{tikzpicture}[remember picture,overlay] 
+    \node [xshift=0cm,yshift=0cm] at (3.45cm,-0.05cm)
+    {\includegraphics[height=1.4cm,keepaspectratio]{usi_inf}};                      
+  \end{tikzpicture}%
+  \vskip-8pt\hskip85pt\insertframetitle\strut\par%
+}
+
+\defbeamertemplate{itemize item}{smallsquare}{\raisebox{0.3ex}{\hbox{\vrule width 0.7ex height 0.7ex}}}
+\defbeamertemplate{itemize subitem}{smallsquare}{\small\raisebox{0.3ex}{\hbox{\vrule width 0.7ex height 0.7ex}}}
+\defbeamertemplate{itemize subsubitem}{smallsquare}{\small\raisebox{0.3ex}{\hbox{\vrule width 0.7ex height 0.7ex}}}
+\setbeamertemplate{itemize items}[smallsquare]
+
+\setbeamertemplate{title page}
+{
+	\frametitle{\tiny{\textsc{Institute of Computational Science}}}%
+  \begin{centering}
+    \vskip-8pt\begin{beamercolorbox}[sep=16pt,left]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%     
+    \end{beamercolorbox}\vskip-8pt%
+    \vskip1em\par
+    \vskip-8pt\begin{beamercolorbox}[sep=16pt,left]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}\vskip-8pt
+    \vskip-8pt\begin{beamercolorbox}[sep=16pt,left]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}\vskip-8pt\vskip0.5em
+    \vskip-8pt\begin{beamercolorbox}[sep=16pt,left]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}\vskip-8pt\vskip0.5em
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+    \vskip-8.1em\vskip-16pt\begin{beamercolorbox}[sep=16pt,right]{author}
+      \scriptsize\em %Acknowledgements (edit style file to change)
+    \end{beamercolorbox}\vskip-16pt
+  \end{centering}
+  \vfill
+}
+
+\useoutertheme{infolines}
+%\useoutertheme{split}
+\useinnertheme{rectangles}
+\setbeamertemplate{headline}{} % removes the headline that infolines inserts
+
+\usecolortheme{whale}
+%\usecolortheme{orchid}
+
+\setbeamerfont{block title}{size={}}
+
+\definecolor{usi@black}{RGB}{35, 31, 32}
+\definecolor{usi@yellow}{RGB}{254, 231, 85}
+
+\setbeamercolor{author in head/foot}{bg=usi@black,fg=white}
+\setbeamercolor{title in head/foot}{bg=usi@yellow,fg=usi@black}
+\setbeamercolor{date in head/foot}{bg=usi@black,fg=white}
+\setbeamercolor{title}{bg=white,fg=usi@black}
+\setbeamercolor{institute}{fg=usi@black}
+\setbeamercolor{frametitle}{bg=white,fg=usi@black}
+\setbeamercolor{author}{fg=usi@black}
+\setbeamercolor{date}{fg=usi@black}
+\setbeamercolor{item}{fg=usi@black}
+\setbeamercolor{normal text}{fg=usi@black}
+\setbeamercolor{math text}{fg=usi@black}
+
+\mode
+<all>
